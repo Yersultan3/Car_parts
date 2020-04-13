@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above ="@id/registration_below">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/quicksand_bold"
+            android:text="Регистрация"
+            android:layout_marginTop="60dp"
+            android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/login_image_below"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="30dp"
+            android:src="@drawable/ic_registration_page"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/registration_below"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:padding="20dp">
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="18sp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:fontFamily="@font/quicksand_bold"-->
+<!--            android:text="Create an account"-->
+<!--            android:layout_marginBottom="20dp"/>-->
+
+        <EditText
+            android:id="@+id/nameInput"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:hint="Имя"
+            android:maxLines="1"
+            android:maxLength="20"
+            android:inputType="textPersonName"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:nextFocusForward="@id/phoneNumberInput"
+             />
+
+<!--        <EditText-->
+<!--            android:id="@+id/passwordInput"-->
+<!--            android:layout_width="310dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:paddingBottom="15dp"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:gravity="center"-->
+<!--            android:hint="Password"-->
+<!--            android:inputType="textPassword" />-->
+
+        <EditText
+            android:id="@+id/phoneNumberInput"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="Номер телефона"
+            android:inputType="phone"
+            android:paddingBottom="15dp"/>
+
+
+        <EditText
+            android:id="@+id/addressInput"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:hint="Адрес магазина"
+            android:maxLength="20"
+            android:paddingBottom="15dp" />
+
+        <Button
+            android:id="@+id/sighUp_btn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_btn"
+            android:text="зарегистрироваться"
+            android:textColor="#F0EEEE"
+            android:textSize="17sp" />
+        <TextView
+            android:id="@+id/goToSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/quicksand_book"
+            android:text="Войти"
+            android:textColor="#383737"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+
+</RelativeLayout>

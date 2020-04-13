@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Apple Motors</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btn_txt_sign_in">Войти</string>
+    <string name="txtview_sign_up">Зарегистрироваться</string>
+    <string name="ConditionDescText">Состояние:</string>
+
+</resources>

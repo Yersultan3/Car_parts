@@ -1,0 +1,325 @@
+
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:background="@color/backgroundColor"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+        <TextView
+            android:id="@+id/tv_manufacturer"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginTop="24dp"
+            android:text="Производитель"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@id/spManufacturer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spProfile" />
+
+
+
+        <TextView
+            android:id="@+id/tvChoiceOfTire"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Выберите тип шин"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/spWidth"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:background="@color/whiteColor"
+            android:elevation="3dp"
+            app:layout_constraintBottom_toBottomOf="@+id/spProfile"
+            app:layout_constraintEnd_toStartOf="@+id/spProfile"
+            app:layout_constraintStart_toStartOf="@+id/spManufacturer"
+            app:layout_constraintTop_toTopOf="@+id/spProfile" />
+
+        <Spinner
+            android:id="@+id/spProfile"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/whiteColor"
+            android:elevation="3dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_manufacturer"
+            app:layout_constraintEnd_toStartOf="@+id/spDiameter"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/spWidth"
+            app:layout_constraintTop_toBottomOf="@+id/tvChoiceOfTire" />
+
+        <Spinner
+            android:id="@+id/spDiameter"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:background="@color/whiteColor"
+            android:elevation="3dp"
+            app:layout_constraintBottom_toBottomOf="@+id/spProfile"
+            app:layout_constraintEnd_toEndOf="@+id/spManufacturer"
+            app:layout_constraintStart_toEndOf="@+id/spProfile"
+            app:layout_constraintTop_toTopOf="@+id/spProfile"
+            app:layout_constraintVertical_bias="1.0" />
+
+
+        <TextView
+            android:id="@+id/tvWidth"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+
+            android:text="Ширина"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/spWidth"
+            app:layout_constraintEnd_toStartOf="@+id/tvProfile"
+            app:layout_constraintStart_toStartOf="@+id/spWidth" />
+
+        <TextView
+            android:id="@+id/tvProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="Профиль"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/spProfile"
+            app:layout_constraintEnd_toStartOf="@+id/tvDiameter"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvWidth"
+            app:layout_constraintTop_toBottomOf="@+id/tvChoiceOfTire" />
+
+        <TextView
+            android:id="@+id/tvDiameter"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="5dp"
+            android:text="Диаметр"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/spDiameter"
+            app:layout_constraintEnd_toEndOf="@+id/spDiameter"
+            app:layout_constraintStart_toEndOf="@+id/tvProfile" />
+
+        <Spinner
+            android:id="@+id/spManufacturer"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/whiteColor"
+            android:elevation="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.506"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_manufacturer" />
+
+        <TextView
+            android:id="@+id/tvSeasonality"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginTop="24dp"
+            android:text="Сезонность"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spManufacturer" />
+
+        <RadioGroup
+            android:id="@+id/rdSeasonality"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/backgroundColor"
+            app:layout_constraintEnd_toEndOf="@+id/spManufacturer"
+            app:layout_constraintStart_toStartOf="@+id/spManufacturer"
+            app:layout_constraintTop_toBottomOf="@+id/tvSeasonality">
+
+
+            <RadioButton
+                android:id="@+id/rdAllSeason"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@drawable/radio_button_custom_new"
+                android:button="@android:color/transparent"
+                android:checked="true"
+                android:elevation="2dp"
+                android:padding="5dp"
+                android:paddingBottom="6dp"
+                android:text="Всесезонные"
+                android:textAlignment="center"
+                android:textColor="@drawable/radio_button_text_color"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/rdSummer"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/radio_button_custom_new"
+                android:button="@android:color/transparent"
+                android:elevation="2dp"
+                android:padding="7dp"
+                android:text="Летние"
+                android:textAlignment="center"
+                android:textColor="@drawable/radio_button_text_color"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/rdWinter"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/radio_button_custom_new"
+                android:button="@android:color/transparent"
+                android:elevation="2dp"
+                android:padding="7dp"
+                android:text="Зимние"
+                android:textAlignment="center"
+                android:textColor="@drawable/radio_button_text_color"
+                android:textSize="15sp" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tvCondition"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginTop="24dp"
+            android:text="Состояние"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rdSeasonality" />
+
+        <RadioGroup
+            android:id="@+id/rdCondition"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/backgroundColor"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCondition">
+
+
+            <RadioButton
+                android:id="@+id/rdNew"
+                android:layout_width="150sp"
+                android:layout_height="30dp"
+                android:background="@drawable/radio_button_custom_new"
+                android:button="@android:color/transparent"
+                android:checked="true"
+                android:elevation="3dp"
+                android:padding="5dp"
+                android:text="Новый"
+                android:textAlignment="center"
+                android:textColor="@drawable/radio_button_text_color"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/rdUsed"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/radio_button_custom_new"
+                android:button="@android:color/transparent"
+                android:elevation="3dp"
+                android:padding="5dp"
+                android:text="Б/у"
+                android:textAlignment="center"
+                android:textColor="@drawable/radio_button_text_color"
+                android:textSize="15sp" />
+
+
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/priceInput"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/rounded_edittext_price"
+            android:elevation="3dp"
+            android:hint="Цена.тг"
+            android:inputType="number|text"
+            android:maxLength="8"
+            android:paddingStart="15dp"
+            app:layout_constraintStart_toStartOf="@+id/addDetailsBtn"
+            app:layout_constraintTop_toBottomOf="@+id/rdCondition" />
+
+
+        <Button
+            android:id="@+id/addPhotoBtn"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_add_a_photo_black_24dp"
+            app:layout_constraintStart_toStartOf="@+id/priceInput"
+            app:layout_constraintTop_toBottomOf="@+id/priceInput" />
+
+
+        <TextView
+            android:id="@+id/tvPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="1dp"
+            android:text="Фото"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="@+id/addPhotoBtn"
+            app:layout_constraintStart_toStartOf="@+id/addPhotoBtn"
+            app:layout_constraintTop_toBottomOf="@+id/addPhotoBtn" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/detailsPhotos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvPhoto"
+            app:layout_constraintStart_toStartOf="parent"
+
+            />
+
+
+        <Button
+            android:id="@+id/addDetailsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/bg_btn"
+            android:text="Добавить"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/whiteColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailsPhotos" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.core.widget.NestedScrollView>
