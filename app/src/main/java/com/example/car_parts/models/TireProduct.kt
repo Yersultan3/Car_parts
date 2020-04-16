@@ -1,5 +1,6 @@
 package com.example.car_parts.models
 
+import android.net.Uri
 import android.os.Parcelable
 import android.widget.Spinner
 import kotlinx.android.parcel.Parcelize

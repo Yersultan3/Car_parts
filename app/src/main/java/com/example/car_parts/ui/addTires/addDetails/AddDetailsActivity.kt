@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.SyncStateContract
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -21,35 +22,40 @@ import com.example.car_parts.models.TireProduct
 import com.example.car_parts.viewModels.TireProductViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_add_details.*
-import kotlinx.android.synthetic.main.detail_photo.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
-import java.util.*
+import kotlin.collections.HashMap
 
 class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
 
     lateinit var id: String
-//    lateinit var image: List<ImagesDeatails>
     lateinit var image: String
     lateinit var width: String
     lateinit var profile: String
     lateinit var diameter: String
     lateinit var manufacturer: String
-    private var  seasonality = "isNotChecked"
-    private var  condition = "isNotChecked"
     lateinit var price: String
+    private var totalItemsSelected = 0
     lateinit var alertDialog: AlertDialog
     lateinit var addImagesAdapter: AddImagesAdapter
-    private val detailsImages = mutableListOf<Uri>()
-    val user = FirebaseAuth.getInstance().currentUser
+    private var  seasonality = "isNotChecked"
+    private var  condition = "isNotChecked"
+    private val detailsImages = arrayListOf<Uri>()
     private var filePath: Uri? = null
+    private var individualImage: Uri? = null
+    private var databaseReference: DatabaseReference? = null
+    private val tireProductViewModel: TireProductViewModel by viewModel(qualifier = named("tireProductApi"))
+    val user = FirebaseAuth.getInstance().currentUser
     internal var storage: FirebaseStorage? = null
     internal var storageReference: StorageReference? = null
-    private val tireProductViewModel: TireProductViewModel by viewModel(qualifier = named("tireProductApi"))
+    internal var imageName: StorageReference? = null
+
 
     companion object {
         private val PICK_IMAGE_CODE = 1000
@@ -63,23 +69,24 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
         if (requestCode == PICK_IMAGE_CODE &&
             resultCode == Activity.RESULT_OK){
             if (data?.clipData != null){
-                val totalItemsSelected = data.clipData!!.itemCount
-                repeat(totalItemsSelected) {
-                    filePath = data.clipData!!.getItemAt(it).uri
+
+                totalItemsSelected = data.clipData!!.itemCount
+
+                var currentImageSelected = 0
+
+                while (currentImageSelected < totalItemsSelected){
+                    filePath = data.clipData!!.getItemAt(currentImageSelected).uri
                     detailsImages.add(filePath!!)
-
-
+                    currentImageSelected += 1
                 }
+
                 detailsPhotos.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-                addImagesAdapter  = AddImagesAdapter(detailsImages)
+                addImagesAdapter  = AddImagesAdapter(detailsImages.reversed())
                 detailsPhotos.adapter = addImagesAdapter
 
             }
         }
     }
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,22 +103,11 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
         initUI()
 
         storage = FirebaseStorage.getInstance()
-//        storageReference = storage!!.reference
 
 
         id = autoId()
         alertDialog = SpotsDialog.Builder().setContext(this).build()
-        storageReference = FirebaseStorage.getInstance().getReference("tireProduct_images/${id}/" + UUID.randomUUID())
-//
-//        addPhotoBtn.setOnClickListener{
-
-
-
-//            val intent = Intent()
-//            intent.type = "image/*"
-//            intent.action = Intent.ACTION_GET_CONTENT
-//            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_CODE)
-//        }
+        storageReference = FirebaseStorage.getInstance().reference.child("tireProductImages/${id}")
 
         val spManufacturers = arrayOf( "Amtel", "Avon", "Barum", "Bridgestone", "Continental", "Cooper", "Cordiant", "Dayton", "Debica", "Dunlop",
             "Falken", "Firestone", "Fulda", "Fuzion", "General Tire", "Gislaved ")
@@ -189,7 +185,7 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
     }
 
     private fun initUI() {
-        rdSeasonality.setOnCheckedChangeListener { group, checkedId ->
+        rdSeasonality.setOnCheckedChangeListener { _, checkedId ->
             Log.d("yera", "here")
             when(checkedId) {
                 R.id.rdAllSeason -> seasonality = rdAllSeason.text.toString()
@@ -216,23 +212,25 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
             R.id.addDetailsBtn -> {
                 addDetails(view)
             }
-
         }
-//
     }
 
     private fun showFileChooser() {
         val intent = Intent()
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-//        intent.putExtra(Constants.INTENT_EXTRA_LIMIT, 10);
+//        intent.putExtra(SyncStateContract.Constants.INTENT_EXTRA_LIMIT, 10);
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_CODE)
 
     }
 
-
-
+    private fun storeLink(url: String){
+        databaseReference = FirebaseDatabase.getInstance().reference.child("UserOne")
+        val hashMap = HashMap<String, String>()
+        hashMap["imageLink"] = url
+        databaseReference?.push()?.setValue(hashMap)
+    }
 
 
     private fun addDetails(view: View){
@@ -242,75 +240,42 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
         manufacturer = spManufacturer.selectedItem.toString()
         price = priceInput.text.toString() + " ₸"
 
-        if (width.isEmpty() || profile.isEmpty() || diameter.isEmpty() ||
+        if (width.isEmpty() || profile.isEmpty() || diameter.isEmpty() || price.isEmpty() ||
             manufacturer.isEmpty() || seasonality == "isNotChecked"  ||
-            condition == "isNotChecked" || price.isEmpty() || filePath == null)
+            condition == "isNotChecked" ||  filePath == null)
         {
             Snackbar.make(view, "Заполните все поля", Snackbar.LENGTH_LONG).show()
         }
         else if (NetworkManager.isNetworkAvailable(this) || filePath != null){
 
-
-//                val progressDialog = ProgressDialog(this)
-//                progressDialog.setTitle("Uploading...")
-//                progressDialog.show()
-//
-//                val imageRef = storageReference!!.child("image/"+ UUID.randomUUID())
-//                imageRef.putFile(filePath!!)
-//
-//                    .addOnSuccessListener {
-//
-//                        progressDialog.dismiss()
-//                        Toast.makeText(applicationContext, "File Uploaded", Toast.LENGTH_SHORT).show()
-//                    }
-//                    .addOnFailureListener{
-//                        progressDialog.dismiss()
-//                        Toast.makeText(applicationContext, "Failed", Toast.LENGTH_SHORT).show()
-//                    }
-//                    .addOnProgressListener {taskSnapShot ->
-//                        val progress = 100.0 * taskSnapShot.bytesTransferred/taskSnapShot.totalByteCount
-//                        progressDialog.setTitle("Uploading image " + progress.toInt() + "%...")
-//
-//                    }
-
-
             alertDialog.setTitle("Uploading")
             alertDialog.show()
 
-//            val uploadTask = storageReference!!.putFile(detailsImages)
-            val uploadTask = storageReference!!.putFile(filePath!!)
+            for(totalItemsSelected in 0 until detailsImages.size) {
+                individualImage = detailsImages[totalItemsSelected]
+                imageName = storageReference!!.child("" + individualImage!!.lastPathSegment)
+
+            val uploadTask = imageName!!.putFile(individualImage!!)
             Log.d("uploadTask", uploadTask.toString())
+                uploadTask.continueWithTask { task ->
+                    if (!task.isSuccessful){
+                        Toast.makeText(this@AddDetailsActivity, "Failed", Toast.LENGTH_SHORT).show()
+                    }
+                    imageName!!.downloadUrl
 
-            val task = uploadTask.continueWithTask { task ->
-                if (!task.isSuccessful){
-                    Toast.makeText(this@AddDetailsActivity, "Failed", Toast.LENGTH_SHORT).show()
-                }
-                storageReference!!.downloadUrl
-
-            }.addOnCompleteListener{ task ->
-                if (task.isSuccessful){
-
-                    val downloadUrl = task.result
-                    image = downloadUrl!!.toString().substring(0,downloadUrl.toString().indexOf("&token"))
-//                    alertDialog.setTitle("Uploading")
-//                    alertDialog.show()
-
-                    val tireProduct = TireProduct(id,  width, profile, diameter, manufacturer, seasonality,
-                        condition, image, price, user!!.uid)
-//            val intent = Intent(this, TiresActivity::class.java)
-                    tireProductViewModel.addTireProduct(tireProduct)
-//                    Log.d("DIRECTLINK", url)
-//                    alertDialog.setTitle("Добавлено")
-                    alertDialog.dismiss()
-                    Toast.makeText(this, "Добавлено", Toast.LENGTH_SHORT).show()
-
-//                    Picasso.get().load(url).into(DetailsImageView)
-
+                }.addOnCompleteListener{ task ->
+                    if (task.isSuccessful){
+                        val downloadUrl = task.result
+                        image = downloadUrl!!.toString().substring(0,downloadUrl.toString().indexOf("&token"))
+                        storeLink(image)
+                        val tireProduct = TireProduct(id,  width, profile, diameter, manufacturer, seasonality,
+                            condition, image, price, user!!.uid)
+                        tireProductViewModel.addTireProduct(tireProduct)
+                        alertDialog.dismiss()
+                        Toast.makeText(this, "Добавлено", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-
-
-
 
             detailsImages.clear()
             addImagesAdapter.notifyDataSetChanged()
@@ -318,12 +283,6 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
             rdCondition.clearCheck()
             rdSeasonality.clearCheck()
             priceInput.text.clear()
-//            DetailsImageView0.setImageBitmap(null)
-//            DetailsImageView1.setImageBitmap(null)
-//            DetailsImageView2.setImageBitmap(null)
-//            DetailsImageView3.setImageBitmap(null)
-
-
         }
         else {
             Snackbar.make(view, "Нет подключения к интернету", Snackbar.LENGTH_LONG).show()

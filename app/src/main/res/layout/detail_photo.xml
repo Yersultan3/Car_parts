@@ -3,8 +3,8 @@
     android:id="@+id/placePhotoCardView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="200dp"
-    android:layout_height="160dp"
+    android:layout_width="150dp"
+    android:layout_height="110dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="5dp"
     app:cardUseCompatPadding="true">
@@ -13,6 +13,6 @@
         android:id="@+id/detailPhoto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 
 </androidx.cardview.widget.CardView>

@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.example.car_parts.R
+import com.example.car_parts.`interface`.GenerateId
 import com.example.car_parts.ui.homeFragmentItem.TireProductDescriptionActivity
 import com.example.car_parts.`interface`.ICardItemClickListener
 import com.example.car_parts.common.Common
@@ -32,6 +33,8 @@ class GetProductsAdapter(private val activity: FragmentActivity?, private val fr
         const val ARG_MY_ITEM = "myItem"
     }
 
+    lateinit var id: String
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
 
@@ -40,6 +43,8 @@ class GetProductsAdapter(private val activity: FragmentActivity?, private val fr
         holder.manufacturer.text = myProducts[position].manufacturer
         holder.seasonality.text = myProducts[position].seasonality
         holder.condition.text = myProducts[position].condition
+
+
 
         val image = myProducts[position].image
 
@@ -54,7 +59,6 @@ class GetProductsAdapter(private val activity: FragmentActivity?, private val fr
         }
 
 
-        Log.d("imagese", image)
 
 
         val db = FirebaseFirestore.getInstance()
@@ -73,7 +77,6 @@ class GetProductsAdapter(private val activity: FragmentActivity?, private val fr
                             .addOnFailureListener { e -> Log.w("error", "Error deleting document", e) }
                 }
                 true
-
             }
             popup.show()
         }
