@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.SyncStateContract
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -69,22 +68,21 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
         if (requestCode == PICK_IMAGE_CODE &&
             resultCode == Activity.RESULT_OK){
             if (data?.clipData != null){
-
                 totalItemsSelected = data.clipData!!.itemCount
+                var currentImagesSelected = 0
 
-                var currentImageSelected = 0
-
-                while (currentImageSelected < totalItemsSelected){
-                    filePath = data.clipData!!.getItemAt(currentImageSelected).uri
+                while (currentImagesSelected < totalItemsSelected){
+                    filePath = data.clipData!!.getItemAt(currentImagesSelected).uri
                     detailsImages.add(filePath!!)
-                    currentImageSelected += 1
+                    currentImagesSelected += 1
                 }
-
-                detailsPhotos.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-                addImagesAdapter  = AddImagesAdapter(detailsImages.reversed())
-                detailsPhotos.adapter = addImagesAdapter
-
+            } else if (data != null && data.data != null){
+                    filePath = data.data
+                    detailsImages.add(filePath!!)
             }
+            detailsPhotos.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+            addImagesAdapter  = AddImagesAdapter(detailsImages.reversed())
+            detailsPhotos.adapter = addImagesAdapter
         }
     }
 
@@ -238,7 +236,7 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
         profile = spProfile.selectedItem.toString()
         diameter = spDiameter.selectedItem.toString()
         manufacturer = spManufacturer.selectedItem.toString()
-        price = priceInput.text.toString() + " ₸"
+        price = priceInput.text.toString()
 
         if (width.isEmpty() || profile.isEmpty() || diameter.isEmpty() || price.isEmpty() ||
             manufacturer.isEmpty() || seasonality == "isNotChecked"  ||
@@ -269,7 +267,7 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
                         image = downloadUrl!!.toString().substring(0,downloadUrl.toString().indexOf("&token"))
                         storeLink(image)
                         val tireProduct = TireProduct(id,  width, profile, diameter, manufacturer, seasonality,
-                            condition, image, price, user!!.uid)
+                            condition, image, "$price ₸", user!!.uid)
                         tireProductViewModel.addTireProduct(tireProduct)
                         alertDialog.dismiss()
                         Toast.makeText(this, "Добавлено", Toast.LENGTH_SHORT).show()
