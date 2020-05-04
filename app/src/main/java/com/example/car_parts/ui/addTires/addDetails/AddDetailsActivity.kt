@@ -45,10 +45,10 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
     lateinit var addImagesAdapter: AddImagesAdapter
     private var  seasonality = "isNotChecked"
     private var  condition = "isNotChecked"
-    private val detailsImages = arrayListOf<Uri>()
+    private val detailsImages = mutableListOf<Uri>()
     private var filePath: Uri? = null
     private var individualImage: Uri? = null
-    private var databaseReference: DatabaseReference? = null
+//    private var databaseReference: DatabaseReference? = null
     private val tireProductViewModel: TireProductViewModel by viewModel(qualifier = named("tireProductApi"))
     val user = FirebaseAuth.getInstance().currentUser
     internal var storage: FirebaseStorage? = null
@@ -81,7 +81,7 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
                     detailsImages.add(filePath!!)
             }
             detailsPhotos.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-            addImagesAdapter  = AddImagesAdapter(detailsImages.reversed())
+            addImagesAdapter  = AddImagesAdapter(detailsImages)
             detailsPhotos.adapter = addImagesAdapter
         }
     }
@@ -105,7 +105,7 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
 
         id = autoId()
         alertDialog = SpotsDialog.Builder().setContext(this).build()
-        storageReference = FirebaseStorage.getInstance().reference.child("tireProductImages/${id}")
+        storageReference = storage?.getReference("tireProducts/${id}")
 
         val spManufacturers = arrayOf( "Amtel", "Avon", "Barum", "Bridgestone", "Continental", "Cooper", "Cordiant", "Dayton", "Debica", "Dunlop",
             "Falken", "Firestone", "Fulda", "Fuzion", "General Tire", "Gislaved ")
@@ -119,10 +119,10 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
         val diameters = arrayOf( "12", "13", "13C", "14", "14C", "15", "15C", "16", "16C", "17",
             "18", "19", "20", "20C", "21", "22 ")
 
-        spManufacturer.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, spManufacturers )
-        spWidth.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, width )
-        spProfile.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, profiles )
-        spDiameter.adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, diameters )
+        spManufacturer.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, spManufacturers )
+        spWidth.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, width )
+        spProfile.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, profiles )
+        spDiameter.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, diameters )
 
         spManufacturer.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -184,14 +184,13 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
 
     private fun initUI() {
         rdSeasonality.setOnCheckedChangeListener { _, checkedId ->
-            Log.d("yera", "here")
             when(checkedId) {
                 R.id.rdAllSeason -> seasonality = rdAllSeason.text.toString()
                 R.id.rdSummer -> seasonality = rdSummer.text.toString()
                 R.id.rdWinter -> seasonality = rdWinter.text.toString()
             }
         }
-        rdCondition.setOnCheckedChangeListener { group, checkedId ->
+        rdCondition.setOnCheckedChangeListener { _, checkedId ->
             when(checkedId) {
                 R.id.rdNew -> condition = rdNew.text.toString()
                 R.id.rdUsed -> condition = rdUsed.text.toString()
@@ -223,12 +222,12 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
 
     }
 
-    private fun storeLink(url: String){
-        databaseReference = FirebaseDatabase.getInstance().reference.child("UserOne")
-        val hashMap = HashMap<String, String>()
-        hashMap["imageLink"] = url
-        databaseReference?.push()?.setValue(hashMap)
-    }
+//    private fun storeLink(url: String){
+//        databaseReference = FirebaseDatabase.getInstance().reference.child("UserOne")
+//        val hashMap = HashMap<String, String>()
+//        hashMap["imageLink"] = url
+//        databaseReference?.push()?.setValue(hashMap)
+//    }
 
 
     private fun addDetails(view: View){
@@ -240,7 +239,8 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
 
         if (width.isEmpty() || profile.isEmpty() || diameter.isEmpty() || price.isEmpty() ||
             manufacturer.isEmpty() || seasonality == "isNotChecked"  ||
-            condition == "isNotChecked" ||  filePath == null)
+            condition == "isNotChecked" )
+//                ||  filePath == null
         {
             Snackbar.make(view, "Заполните все поля", Snackbar.LENGTH_LONG).show()
         }
@@ -249,12 +249,11 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
             alertDialog.setTitle("Uploading")
             alertDialog.show()
 
-            for(totalItemsSelected in 0 until detailsImages.size) {
+            repeat( detailsImages.size) {totalItemsSelected ->
                 individualImage = detailsImages[totalItemsSelected]
-                imageName = storageReference!!.child("" + individualImage!!.lastPathSegment)
+                imageName = storageReference?.child("" + individualImage?.lastPathSegment)
 
             val uploadTask = imageName!!.putFile(individualImage!!)
-            Log.d("uploadTask", uploadTask.toString())
                 uploadTask.continueWithTask { task ->
                     if (!task.isSuccessful){
                         Toast.makeText(this@AddDetailsActivity, "Failed", Toast.LENGTH_SHORT).show()
@@ -265,7 +264,8 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
                     if (task.isSuccessful){
                         val downloadUrl = task.result
                         image = downloadUrl!!.toString().substring(0,downloadUrl.toString().indexOf("&token"))
-                        storeLink(image)
+//                        storeLink(image)
+
                         val tireProduct = TireProduct(id,  width, profile, diameter, manufacturer, seasonality,
                             condition, image, "$price ₸", user!!.uid)
                         tireProductViewModel.addTireProduct(tireProduct)

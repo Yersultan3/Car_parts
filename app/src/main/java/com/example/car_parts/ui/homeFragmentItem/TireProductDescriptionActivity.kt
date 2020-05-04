@@ -1,26 +1,27 @@
 package com.example.car_parts.ui.homeFragmentItem
 
-import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
-import coil.Coil
-import coil.api.get
+import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
-import coil.size.Scale
-import coil.transform.CircleCropTransformation
+import com.example.car_parts.adapter.ViewImagesAdapter
 import com.example.car_parts.R
 import com.example.car_parts.adapter.GetProductsAdapter
-import com.example.car_parts.models.MyModel
 import com.example.car_parts.models.TireProduct
-import com.squareup.picasso.Picasso
 import com.stfalcon.imageviewer.StfalconImageViewer
 import kotlinx.android.synthetic.main.activity_tire_product_description.*
+import kotlinx.android.synthetic.main.view_photo.*
 
-class TireProductDescriptionActivity : AppCompatActivity() {
+class TireProductDescriptionActivity : AppCompatActivity(), ViewImagesAdapter.Photo  {
 
-//      lateinit var image: MutableList<TireProduct>
-        private val image = mutableListOf<TireProduct>()
+
+        private lateinit var viewer: StfalconImageViewer<String>
+        private lateinit var tireProduct: TireProduct
+        private val imageList = mutableListOf<String>()
+        private lateinit var viewPhotosAdapter: ViewImagesAdapter
+        private val viewPool by lazy { RecyclerView.RecycledViewPool() }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +31,7 @@ class TireProductDescriptionActivity : AppCompatActivity() {
         actionbar!!.title = ""
         actionbar.setDisplayHomeAsUpEnabled(true)
 
-
-
-
-        val tireProduct = intent.getParcelableExtra<TireProduct>(GetProductsAdapter.ARG_MY_ITEM)!!
+        tireProduct = intent.getParcelableExtra<TireProduct>(GetProductsAdapter.ARG_MY_ITEM)!!
 
         priceDesc.text = tireProduct.price
         conditionDesc.text = tireProduct.condition
@@ -47,10 +45,10 @@ class TireProductDescriptionActivity : AppCompatActivity() {
         }
 
 
+        viewPhotosAdapter = ViewImagesAdapter(this, imageList)
+        recycler_view_viewImages.adapter = viewPhotosAdapter
+        recycler_view_viewImages.setRecycledViewPool(viewPool)
 
-//        StfalconImageViewer.Builder<Image>(this, tireProduct.image) { view, image ->
-//            Picasso.get().load().into(view)
-//        }.show()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -58,4 +56,47 @@ class TireProductDescriptionActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
+
+    override fun onPhotoClicked(
+        photosList: List<String>, position: Int, target: ImageView) {
+        viewer = StfalconImageViewer.Builder(this, photosList){ view, image ->
+
+
+//            view.load(image){
+//                crossfade(750)
+//                size(2500, 1500)
+////            scale(Scale.FILL)
+//                placeholder(R.drawable.ic_image)
+//            }
+
+//            Picasso.get().load(image).into(view)
+
+        }
+            .withStartPosition(position)
+            .withTransitionFrom(target)
+            .withHiddenStatusBar(false)
+            .show()
+    }
+
+
+//    override fun onPhotoClicked(photosList: List<String>, position: Int, target: ImageView) {
+//        viewer = StfalconImageViewer.Builder(this, photosList){ view, _ ->
+//
+//
+//            view.load(tireProduct.image){
+//                crossfade(750)
+//                size(2500, 1500)
+////            scale(Scale.FILL)
+//                placeholder(R.drawable.ic_image)
+//            }
+//
+////            Picasso.get().load(image).into(view)
+//
+//        }
+//            .withStartPosition(position)
+//            .withTransitionFrom(target)
+//            .withHiddenStatusBar(false)
+//            .show()
+//
+//    }
 }

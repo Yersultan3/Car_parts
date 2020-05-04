@@ -11,6 +11,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_viewImages"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/tireProductImage"
@@ -32,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@id/tireProductImage">
+        app:layout_constraintTop_toBottomOf="@id/recycler_view_viewImages">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

@@ -83,7 +83,6 @@ class GetProductsAdapter(private val activity: FragmentActivity?, private val fr
     }
 
     private fun sendToMyAdItem(myItem: TireProduct){
-        Log.d("argyn", activity.toString())
         val intent = Intent(activity, TireProductDescriptionActivity::class.java)
         intent.putExtra(ARG_MY_ITEM, myItem)
         activity?.startActivity(intent)

@@ -81,11 +81,11 @@ class AddFragment : Fragment()  {
 
         // Items
         itemList.add(MyModel(R.drawable.tires, "Шины"))
-        itemList.add(MyModel(R.drawable.tires, "Диски"))
-        itemList.add(MyModel(R.drawable.tires, "Шины"))
-        itemList.add(MyModel(R.drawable.tires, "Шины"))
-        itemList.add(MyModel(R.drawable.tires, "Шины"))
-        itemList.add(MyModel(R.drawable.tires, "Шины"))
+        itemList.add(MyModel(R.drawable.engine, "Двигатели"))
+        itemList.add(MyModel(R.drawable.interior, "Интерьер"))
+        itemList.add(MyModel(R.drawable.disk, "Диски"))
+        itemList.add(MyModel(R.drawable.hodovka, "Ходовка"))
+        itemList.add(MyModel(R.drawable.exterior, "Экстерьер"))
 
 
 

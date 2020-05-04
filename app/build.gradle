@@ -89,7 +89,16 @@ dependencies {
     //bottombar lib
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7'
 
+//  Image viewer
     implementation 'com.github.stfalcon:stfalcon-imageviewer:1.0.1'
+
+//    MapBox
+    implementation('com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0')
+            {
+                exclude group: 'group_name', module: 'module_name'
+//                exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
+            }
+
 
 
     //Piccaso

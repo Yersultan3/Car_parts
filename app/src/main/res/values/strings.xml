@@ -6,5 +6,9 @@
     <string name="btn_txt_sign_in">Войти</string>
     <string name="txtview_sign_up">Зарегистрироваться</string>
     <string name="ConditionDescText">Состояние:</string>
+    <string name="reg_tv">Регистрация</string>
+    <string name="regName">Имя</string>
+    <string name="access_token" translatable="false">pk.eyJ1IjoieWVyc3VsdGFuIiwiYSI6ImNrOTh2emtsaTA1eHgzbXFqbXViZG02MDYifQ.3tA9CvuTjN5ybkEzTfBmVw</string>
+    <string name="selected_place_info">Selected location information:\n%1$s</string>
 
 </resources>

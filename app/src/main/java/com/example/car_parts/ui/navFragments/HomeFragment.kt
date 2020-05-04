@@ -95,7 +95,7 @@ class HomeFragment : Fragment(){
 
         db.collection("tireProducts")
             .get()
-            .addOnSuccessListener { result ->
+            .addOnSuccessListener {  result ->
                 for (document in result) {
                     if (document.get("addedBy").toString() == user?.uid) {
                         itemList.add(TireProduct(
