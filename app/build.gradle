@@ -99,8 +99,7 @@ dependencies {
 //                exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
             }
 
-
-
+    implementation 'com.github.imperiumlabs:GeoFirestore-Android:v1.5.0'
     //Piccaso
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.d-max:spots-dialog:1.1@aar'

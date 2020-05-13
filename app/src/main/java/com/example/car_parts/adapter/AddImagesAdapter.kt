@@ -1,4 +1,5 @@
-package com.example.bcompanionkotlin.adapters
+
+package com.example.car_parts.adapter
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -8,8 +9,6 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.example.car_parts.R
-import com.example.car_parts.ui.addTires.addDetails.AddDetailsActivity
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.detail_photo.view.*
 
 class AddImagesAdapter(private val detailsPhotos: List<Uri>)

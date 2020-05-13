@@ -73,7 +73,7 @@ class GetProductsAdapter(private val activity: FragmentActivity?, private val fr
                             .delete()
                             .addOnSuccessListener {
                                 fragment?.deleteItem(position)
-                                Log.d("success", "DocumentSnapshot successfully deleted!") }
+                            }
                             .addOnFailureListener { e -> Log.w("error", "Error deleting document", e) }
                 }
                 true

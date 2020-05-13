@@ -6,14 +6,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bcompanionkotlin.adapters.AddImagesAdapter
+import com.example.car_parts.adapter.AddImagesAdapter
 import com.example.car_parts.`interface`.GenerateId.autoId
 import com.example.car_parts.R
 import com.example.car_parts.`interface`.NetworkManager
@@ -21,20 +20,18 @@ import com.example.car_parts.models.TireProduct
 import com.example.car_parts.viewModels.TireProductViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_add_details.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.qualifier.named
-import kotlin.collections.HashMap
 
 class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
 
     lateinit var id: String
     lateinit var image: String
+//    lateinit var imageList: ArrayList<String>
     lateinit var width: String
     lateinit var profile: String
     lateinit var diameter: String
@@ -48,7 +45,6 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
     private val detailsImages = mutableListOf<Uri>()
     private var filePath: Uri? = null
     private var individualImage: Uri? = null
-//    private var databaseReference: DatabaseReference? = null
     private val tireProductViewModel: TireProductViewModel by viewModel(qualifier = named("tireProductApi"))
     val user = FirebaseAuth.getInstance().currentUser
     internal var storage: FirebaseStorage? = null
@@ -264,9 +260,10 @@ class AddDetailsActivity: AppCompatActivity(), View.OnClickListener{
                     if (task.isSuccessful){
                         val downloadUrl = task.result
                         image = downloadUrl!!.toString().substring(0,downloadUrl.toString().indexOf("&token"))
-//                        storeLink(image)
+//                        imageList = ArrayList(image.length)
+//                      storeLink(image)
 
-                        val tireProduct = TireProduct(id,  width, profile, diameter, manufacturer, seasonality,
+                        val tireProduct = TireProduct(id, width, profile, diameter, manufacturer, seasonality,
                             condition, image, "$price ₸", user!!.uid)
                         tireProductViewModel.addTireProduct(tireProduct)
                         alertDialog.dismiss()
